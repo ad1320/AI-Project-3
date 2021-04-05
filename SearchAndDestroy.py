@@ -51,6 +51,7 @@ def agent_1(dim):
         if agent_space == goal_search.query:                                            #Highest prob is current space
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
+                CreateMap.print_map(environment)
                 return my_agent.score
         else:                                                                           #Agent needs to travel
             my_agent.score += goal_search.manhattan                                     #Distance traveled is manhattan, no need to actually travel for basic agent
@@ -58,13 +59,14 @@ def agent_1(dim):
             my_agent.y = goal_search.y
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
+                CreateMap.print_map(environment)
                 return my_agent.score
         fail_in_current(goal_search, my_agent)
         update_prob_map(fringe, my_agent, goal_search)
         fringe.append(goal_search)
             
 if __name__ == '__main__':
-    score = agent_1(50)
+    score = agent_1(5)
     print("Your score is {}.\n".format(score))
 
 
