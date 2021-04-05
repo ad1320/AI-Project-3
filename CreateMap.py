@@ -21,8 +21,6 @@ class MapSpace:                                                                 
     def __lt__(self, other):                                                        #Order the fringe based on how close to guarantee
         return self.prob < other.prob
 
-
-
 def create_map(dim):
     map = []
     terrains = [0.1, 0.3, 0.7, 0.9]
@@ -34,11 +32,26 @@ def create_map(dim):
     rand_x = ran.randint(0,dim-1)
     rand_y = ran.randint(0,dim-1)
     map[rand_x][rand_y].target = 1
+    print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
+    return map
 
 def print_map(map):
     dim = len(map)
-    pm = np.zeros((dim, dim), dtype=int)
+    pm = np.zeros((dim, dim), dtype=float)
     for i in range(dim):
         for j in range(dim):
             pm[i][j] = map[i][j].prob
     print(pm)
+
+def print_terrain(map):
+    dim = len(map)
+    pm = np.zeros((dim, dim), dtype=float)
+    for i in range(dim):
+        for j in range(dim):
+            pm[i][j] = map[i][j].terrain
+    print(pm)
+
+if __name__ == '__main__':
+    my_map = create_map(5)
+    print_map(my_map)
+    print_terrain(my_map)
