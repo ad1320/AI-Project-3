@@ -24,8 +24,8 @@ def search_space(space, agent):
 #     for space in unsearched_list:
 #         space.prob = prob_formula(space.prob, dim, space.terrain, space.misses)
 
-def prob_contains(map_space, fail_space, agent):                                                #Calculates P(in cell I | failure cell J)
-    prob_given_fail = map_space.prob / (fail_space.prob*fail_space.terrain+1-fail_space.prob)
+def prob_contains(map_space, fail_prob, fail_terrain, agent):                                                #Calculates P(in cell I | failure cell J)
+    prob_given_fail = map_space.prob / (fail_prob*fail_terrain+1-fail_prob)
     map_space.prob = prob_given_fail
     map_space.manhattan = abs(map_space.x - agent.x) + abs(map_space.y - agent.y)
 
@@ -34,9 +34,9 @@ def fail_in_current(fail_space, agent):                                         
     fail_space.prob = new_prob
     fail_space.manhattan = abs(fail_space.x - agent.x) + abs(fail_space.y - agent.y)
 
-def update_prob_map(fringe, agent, fail_space):
+def update_prob_map(fringe, agent, fail_prob, fail_terrain):
     for space in fringe:
-        prob_contains(space, fail_space, agent)
+        prob_contains(space, fail_prob, fail_terrain, agent)
 
 def agent_1(dim):
     creation_output = CreateMap.create_map_1(dim)
@@ -48,7 +48,8 @@ def agent_1(dim):
         for y in range(dim):
             fringe.append(environment[x][y])
     while(True):
-        #CreateMap.print_map(environment)
+        CreateMap.print_map(environment)
+        print(sum_probs(environment))
         heapq.heapify(fringe)
         goal_search = heapq.heappop(fringe)                                             #Highest probability && Lowest manhattan
         agent_space = (my_agent.x, my_agent.y)
@@ -66,8 +67,10 @@ def agent_1(dim):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
 
 def agent_1_dep(dim, environment, my_agent):
@@ -95,8 +98,10 @@ def agent_1_dep(dim, environment, my_agent):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
 
 def agent_2(dim):
@@ -127,8 +132,10 @@ def agent_2(dim):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
 
 def agent_2_dep(dim, environment, my_agent):
@@ -156,8 +163,10 @@ def agent_2_dep(dim, environment, my_agent):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
 
 def agent_3(dim):
@@ -188,8 +197,10 @@ def agent_3(dim):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
 
 def agent_3_dep(dim, environment, my_agent):
@@ -218,9 +229,19 @@ def agent_3_dep(dim, environment, my_agent):
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
                 return my_agent.score
+        fail_prob = goal_search.prob
+        fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
-        update_prob_map(fringe, my_agent, goal_search)
+        update_prob_map(fringe, my_agent, fail_prob, fail_terrain)
         fringe.append(goal_search)
+
+def sum_probs(map):
+    total = 0
+    dim = len(map)
+    for x in range(dim):
+        for y in range(dim):
+            total += map[x][y].prob
+    return total
             
 def compare_agents(agent_1, agent_2, agent_3, dim, trials):
     count_1 = 0
@@ -231,10 +252,10 @@ def compare_agents(agent_1, agent_2, agent_3, dim, trials):
         count_1 += agent_1_dep(dim, maps[0][0], maps[0][1])
         count_2 += agent_2_dep(dim, maps[1][0], maps[1][1])                                      
         count_3 += agent_3_dep(dim, maps[2][0], maps[2][1])
-    print(count_1, count_2, count_3)
+    print(count_1/trials, count_2/trials, count_3/trials)
 
 if __name__ == '__main__':
-    #score = agent_2(10)
+    #score = agent_1(2)
     #print("Your score is {}.\n".format(score))
     compare_agents(agent_1, agent_2, agent_3, 10, 100)
 
