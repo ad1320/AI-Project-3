@@ -122,16 +122,18 @@ def agent_2(dim):
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         else:                                                                           #Agent needs to travel
-            my_agent.score += goal_search.manhattan                                     #Distance traveled is manhattan, no need to actually travel for basic agent
+            my_agent.distance += goal_search.manhattan                                  #Distance traveled is manhattan, no need to actually travel for basic agent
             my_agent.x = goal_search.x                                                  #Update agent's location
             my_agent.y = goal_search.y
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         fail_prob = goal_search.prob
         fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
@@ -153,16 +155,18 @@ def agent_2_dep(dim, environment, my_agent):
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         else:                                                                           #Agent needs to travel
-            my_agent.score += goal_search.manhattan                                     #Distance traveled is manhattan, no need to actually travel for basic agent
+            my_agent.distance += goal_search.manhattan                                  #Distance traveled is manhattan, no need to actually travel for basic agent
             my_agent.x = goal_search.x                                                  #Update agent's location
             my_agent.y = goal_search.y
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         fail_prob = goal_search.prob
         fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
@@ -179,6 +183,8 @@ def agent_3(dim):
         for y in range(dim):
             fringe.append(environment[x][y])
     while(True):
+        if (my_agent.score + my_agent.distance) % 100 == 0:
+            print("Searches + Distance: {}.\n".format(my_agent.score+my_agent.distance))
         #CreateMap.print_map(environment)
         heapq.heapify(fringe)
         goal_search = heapq.heappop(fringe)                                             #Highest probability && Lowest manhattan
@@ -187,16 +193,18 @@ def agent_3(dim):
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         else:                                                                           #Agent needs to travel
-            my_agent.score += goal_search.manhattan                                     #Distance traveled is manhattan, no need to actually travel for basic agent
+            my_agent.distance += goal_search.manhattan                                  #Distance traveled is manhattan, no need to actually travel for basic agent
             my_agent.x = goal_search.x                                                  #Update agent's location
             my_agent.y = goal_search.y
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         fail_prob = goal_search.prob
         fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
@@ -211,6 +219,8 @@ def agent_3_dep(dim, environment, my_agent):
         for y in range(dim):
             fringe.append(environment[x][y])
     while(True):
+        if (my_agent.score + my_agent.distance) % 100 == 0:
+            print("Searches + Distance: {}.\n".format(my_agent.score+my_agent.distance))
         #CreateMap.print_map(environment)
         heapq.heapify(fringe)
         goal_search = heapq.heappop(fringe)                                             #Highest probability && Lowest manhattan
@@ -219,16 +229,18 @@ def agent_3_dep(dim, environment, my_agent):
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         else:                                                                           #Agent needs to travel
-            my_agent.score += goal_search.manhattan                                     #Distance traveled is manhattan, no need to actually travel for basic agent
+            my_agent.distance += goal_search.manhattan                                  #Distance traveled is manhattan, no need to actually travel for basic agent
             my_agent.x = goal_search.x                                                  #Update agent's location
             my_agent.y = goal_search.y
             check = search_space(goal_search, my_agent)                                 #Check if target is found
             if check:
                 CreateMap.print_map(environment)
                 print("It took {} searches in {} terrain {} to hit the target.\n".format(goal_search.misses+1, goal_search.terrain, goal_search.query))
-                return my_agent.score
+                print("Distance Traveled: {}. Searches Made: {}.\n".format(my_agent.distance, my_agent.score))
+                return my_agent.score + my_agent.distance
         fail_prob = goal_search.prob
         fail_terrain = goal_search.terrain
         fail_in_current(goal_search, my_agent)
@@ -257,7 +269,11 @@ def compare_agents(agent_1, agent_2, agent_3, dim, trials):
 if __name__ == '__main__':
     #score = agent_1(2)
     #print("Your score is {}.\n".format(score))
-    compare_agents(agent_1, agent_2, agent_3, 10, 100)
+    compare_agents(agent_1, agent_2, agent_3, 10, 500)
+    # score = agent_2(50)
+    # print("Your score is {} for agent 2.\n".format(score))
+    # score_3 = agent_3(50)
+    # print("Your score is {} for agent 3.\n".format(score_3))
 
 
 
