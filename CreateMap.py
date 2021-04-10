@@ -52,8 +52,9 @@ class MapSpace_3:                                                               
         self.init_prob = 1/(dim**2)
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
-    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
-        return self.prob*self.manhattan*-1 < other.prob*other.manhattan*-1
+    def __lt__(self, other):
+        #return self.prob*-1 < other.prob*-1                                                            #Order the fringe based on how close to guarantee
+        return self.prob*((self.manhattan)**1)*(1-self.terrain)*-1 < other.prob*(1-self.terrain)*((other.manhattan)**1)*-1
 
 def create_map_1(dim):
     map = []

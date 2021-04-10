@@ -204,7 +204,6 @@ def agent_3(dim):
         fringe.append(goal_search)
 
 def agent_3_dep(dim, environment, my_agent):
-    creation_output = CreateMap.create_map_3(dim)
     #CreateMap.print_terrain(environment)
     fringe = []                                                                         #Holds all map spaces for probability checking
     for x in range(dim):
@@ -249,15 +248,15 @@ def compare_agents(agent_1, agent_2, agent_3, dim, trials):
     count_3 = 0
     for y in range(trials):                                            #Perform 100 tests per density
         maps = CreateMap.create_all_maps(dim)
-        count_1 += agent_1_dep(dim, maps[0][0], maps[0][1])
-        count_2 += agent_2_dep(dim, maps[1][0], maps[1][1])                                      
-        count_3 += agent_3_dep(dim, maps[2][0], maps[2][1])
+        count_1 += agent_1(dim, maps[0][0], maps[0][1])
+        count_2 += agent_2(dim, maps[1][0], maps[1][1])                                      
+        count_3 += agent_3(dim, maps[2][0], maps[2][1])
     print(count_1/trials, count_2/trials, count_3/trials)
 
 if __name__ == '__main__':
-    #score = agent_1(2)
-    #print("Your score is {}.\n".format(score))
-    compare_agents(agent_1, agent_2, agent_3, 10, 100)
+    score = agent_3(10)
+    print("Your score is {}.\n".format(score))
+    #compare_agents(agent_1_dep, agent_2_dep, agent_3_dep, 10, 100)
 
 
 
