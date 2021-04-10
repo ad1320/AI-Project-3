@@ -55,7 +55,7 @@ class MapSpace_3:                                                               
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
     def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
-        return ((self.prob*-1) + ((1/(100000*self.dim)) * self.manhattan)) < ((other.prob*-1) + ((1/(100000*self.dim)) * other.manhattan))
+        return ((self.prob*-1) + ((1/(100000*self.dim)) * self.manhattan * self.terrain)) < ((other.prob*-1) + ((1/(100000*self.dim)) * other.manhattan * other.terrain))
 
 def create_map_1(dim):
     map = []
@@ -72,8 +72,8 @@ def create_map_1(dim):
     rand_y = ran.randint(0,dim-1)
     map[rand_x][rand_y].target = 1
     my_agent = Agent(start_space, map)
-    print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
-    print("The agent starts at ({}, {}).\n".format(start_x, start_y))
+    #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
+    #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
     return [map, my_agent]
 
 def create_map_2(dim):
@@ -91,8 +91,8 @@ def create_map_2(dim):
     rand_y = ran.randint(0,dim-1)
     map[rand_x][rand_y].target = 1
     my_agent = Agent(start_space, map)
-    print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
-    print("The agent starts at ({}, {}).\n".format(start_x, start_y))
+    #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
+    #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
     return [map, my_agent]
 
 def create_map_3(dim):
@@ -110,8 +110,8 @@ def create_map_3(dim):
     rand_y = ran.randint(0,dim-1)
     map[rand_x][rand_y].target = 1
     my_agent = Agent(start_space, map)
-    print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
-    print("The agent starts at ({}, {}).\n".format(start_x, start_y))
+    #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
+    #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
     return [map, my_agent]
 
 def create_all_maps(dim):
@@ -149,8 +149,8 @@ def create_all_maps(dim):
     my_agent_3 = Agent(start_space, maps[2][0])
     maps[2][1] = my_agent_3
     
-    print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
-    print("The agent starts at ({}, {}).\n".format(start_x, start_y))
+    #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
+    #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
     return maps
 
 
