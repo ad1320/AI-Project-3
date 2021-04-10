@@ -7,7 +7,8 @@ class Agent:
         self.query = start
         self.x = start[0]
         self.y = start[1]     
-        self.score = 0                                                                  #Distance traveled + number of searches                     
+        self.score = 0                                                                  #Distance traveled + number of searches   
+        self.distance = 0                  
 
 class MapSpace_1:                                                                         #Holds all the info for a map space
     def __init__(self, dim, query, terrain, agent_space):         #Inputs are the space (query), the current map ,dimension, and agent's location
@@ -52,9 +53,8 @@ class MapSpace_3:                                                               
         self.init_prob = 1/(dim**2)
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
-    def __lt__(self, other):
-        #return self.prob*-1 < other.prob*-1                                                            #Order the fringe based on how close to guarantee
-        return self.prob*((self.manhattan)**1)*(1-self.terrain)*-1 < other.prob*(1-self.terrain)*((other.manhattan)**1)*-1
+    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
+        return ((self.prob*-1) + ((1/1000000) * self.manhattan)) < ((other.prob*-1) + ((1/1000000) * other.manhattan))
 
 def create_map_1(dim):
     map = []
