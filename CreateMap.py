@@ -55,7 +55,7 @@ class MapSpace_3:                                                               
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
     def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee with a penalty commesurate with the distance to the square from current position
-        return ((self.prob*-1) + ((1/(self.dim**2.7)) * self.manhattan)) < ((other.prob*-1) + ((1/(self.dim**2.7)) * other.manhattan))
+        return ((self.prob*-1) + ((1/(self.dim**3)) * self.manhattan)) < ((other.prob*-1) + ((1/(self.dim**3)) * other.manhattan))
 
 #Create map functions are identical except for which Map_Space (and, thus, comparison method) they use
 

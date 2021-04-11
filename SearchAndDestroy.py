@@ -3,7 +3,6 @@ import random as ran
 import CreateMap
 import heapq
 import math
-import matplotlib.pyplot as plt
 
 def search_space(space, agent):
     agent.score += 1                                                                            #Each search increases agent's score
@@ -16,7 +15,7 @@ def search_space(space, agent):
         return 0                                                                                #If not success then failiure
 
 
-def prob_contains(map_space, fail_prob, fail_terrain, agent):                                                #Calculates P(in cell I | failure at cell J)
+def prob_contains(map_space, fail_prob, fail_terrain, agent):                                   #Calculates P(in cell I | failure at cell J)
     prob_given_fail = map_space.prob / (fail_prob*fail_terrain+1-fail_prob)
     map_space.prob = prob_given_fail
     map_space.manhattan = abs(map_space.x - agent.x) + abs(map_space.y - agent.y)
@@ -251,7 +250,7 @@ def sum_probs(map):
             total += map[x][y].prob
     return total
             
-def compare_agents(agent_1, agent_2, agent_3, dim, trials):
+def compare_agents(dim, trials):
     count_1 = 0
     count_2 = 0
     count_3 = 0
@@ -265,8 +264,9 @@ def compare_agents(agent_1, agent_2, agent_3, dim, trials):
 if __name__ == '__main__':
     #score = agent_1(2)
     #print("Your score is {}.\n".format(score))
-    for x in range(3,20):
-        compare_agents(agent_1, agent_2, agent_3, x, 30)
+    # for x in range(3,20):
+    #     compare_agents(x, 30)
+    compare_agents(50, 50)
     # score = agent_2(50)
     # print("Your score is {} for agent 2.\n".format(score))
     # score_3 = agent_3(50)
