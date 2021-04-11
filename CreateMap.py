@@ -21,7 +21,7 @@ class MapSpace_1:                                                               
         self.init_prob = 1/(dim**2)
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
-    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
+    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee for target to be there
         if self.prob == other.prob:
             return self.manhattan < other.manhattan
         return self.prob*-1 < other.prob*-1
@@ -37,7 +37,7 @@ class MapSpace_2:                                                               
         self.init_prob = 1/(dim**2)
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
-    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
+    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee to find target there
         if self.prob*(1-self.terrain) == other.prob*(1-other.terrain):
             return self.manhattan < other.manhattan
         return self.prob*(1-self.terrain)*-1 <other.prob*(1-other.terrain)*-1
@@ -54,23 +54,25 @@ class MapSpace_3:                                                               
         self.init_prob = 1/(dim**2)
         self.prob = 1/(dim**2)
         self.manhattan = abs(query[0] - agent_space[0]) + abs(query[1] - agent_space[1])
-    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee
-        return ((self.prob*-1) + ((1/(100000*self.dim)) * self.manhattan * self.terrain)) < ((other.prob*-1) + ((1/(100000*self.dim)) * other.manhattan * other.terrain))
+    def __lt__(self, other):                                                            #Order the fringe based on how close to guarantee with a penalty commesurate with the distance to the square from current position
+        return ((self.prob*-1) + ((1/(self.dim**2.7)) * self.manhattan)) < ((other.prob*-1) + ((1/(self.dim**2.7)) * other.manhattan))
+
+#Create map functions are identical except for which Map_Space (and, thus, comparison method) they use
 
 def create_map_1(dim):
     map = []
-    terrains = [0.1, 0.3, 0.7, 0.9]
+    terrains = [0.1, 0.3, 0.7, 0.9]                             #Possible false negative values
     start_x = ran.randint(0,dim-1)
     start_y = ran.randint(0,dim-1)
-    start_space = (start_x, start_y)
+    start_space = (start_x, start_y)                            #Randomly choose agent starting square
     for x in range(dim):
-        map.append([])
+        map.append([])                                          #Add a row
         for y in range(dim):
-            t_num = ran.randint(0,3)
-            map[x].append(MapSpace_1(dim, (x,y), terrains[t_num], start_space))
+            t_num = ran.randint(0,3)                            #Choose a terrain at random
+            map[x].append(MapSpace_1(dim, (x,y), terrains[t_num], start_space))                         #Add a map_space object at current position
     rand_x = ran.randint(0,dim-1)
     rand_y = ran.randint(0,dim-1)
-    map[rand_x][rand_y].target = 1
+    map[rand_x][rand_y].target = 1                                                      #Place the target at a random position
     my_agent = Agent(start_space, map)
     #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
     #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
@@ -114,7 +116,7 @@ def create_map_3(dim):
     #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
     return [map, my_agent]
 
-def create_all_maps(dim):
+def create_all_maps(dim):                                           #Creates one map as above, then copies it twice but uses the other type of map_spaces in the copies (same terrains and locations of agent and target)
     maps = [[[],[]],[[],[]],[[],[]]]
     terrains = [0.1, 0.3, 0.7, 0.9]
     start_x = ran.randint(0,dim-1)
@@ -151,12 +153,12 @@ def create_all_maps(dim):
     
     #print("The ({}, {}) spot holds the target.\n".format(rand_x, rand_y))
     #print("The agent starts at ({}, {}).\n".format(start_x, start_y))
-    return maps
+    return maps                                                                 #return maps and their agents as a package for use in the statistical test method
 
 
 def print_map(map):
     dim = len(map)
-    pm = np.zeros((dim, dim), dtype=float)
+    pm = np.zeros((dim, dim), dtype=float)                                  #prints the current belief of the target being in each space on the map
     for i in range(dim):
         for j in range(dim):
             pm[i][j] = map[i][j].prob
@@ -164,7 +166,7 @@ def print_map(map):
 
 def print_terrain(map):
     dim = len(map)
-    pm = np.zeros((dim, dim), dtype=float)
+    pm = np.zeros((dim, dim), dtype=float)                                 #prints the terrain (false negative value) of each space on the map
     for i in range(dim):
         for j in range(dim):
             pm[i][j] = map[i][j].terrain
